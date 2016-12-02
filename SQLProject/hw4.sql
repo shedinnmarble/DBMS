@@ -127,6 +127,17 @@ GROUP  BY h.hotelno,
           h.hotelname, 
           h.city 
 
+--test to use exists
+SELECT Count(*) AS NumberOfRooms, 
+       r.hotelno 
+FROM   room r 
+WHERE  EXISTS(SELECT * 
+              FROM   hotel h 
+              WHERE  r.hotelno = h.hotelno 
+                     AND h.city = 'London') 
+GROUP  BY r.hotelno 
+         
+
 --6.24 What is the average number of bookings for each hotel in August? 
 SELECT Count(*)avgBooking, 
        h.hotelname, 
@@ -137,7 +148,7 @@ FROM   hotel h
 WHERE  Month(b.datefrom) = 8 
 GROUP  BY h.hotelname, 
           h.hotelno 
-UNION 
+union 
 SELECT 0, 
        h.hotelname, 
        h.hotelno 
