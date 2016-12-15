@@ -1,82 +1,105 @@
+CREATE DATABASE easydring_dewei; 
 
-create database EasyDring_Dewei;
-go
-use EasyDring_Dewei;
-go
-create table Branch(
-bid int primary key identity,
-address nvarchar(100),
-city nvarchar(50)
-)
-go
-create table Car(
-	carNo int primary key identity,	
-	registrationNumber int			
-)
-go
-create table Staff(
-[sid] int primary key identity,
-position nvarchar(100) not null,
-carNo int constraint FK_Staff_Car foreign key (carNo) references Car(carNo),
-gender char check(gender in('M','F')),
-Dob date,
-bid int constraint FK_Staff_Branch foreign key(bid)  references Branch(bid)
-)
-go
-create table Inspection(
-	insId int primary key identity,
-	numberFaults int,
-	faultDescription nvarchar(500),
-	carNo int constraint FK_Inspection_Car foreign key(carNo) references Car(carNo)	
-)
+go 
 
-create table Client(
-	cId int primary key identity,
-	personalDetails nvarchar(100),
-	validPersonalLicense bit default 0,
-	specialNeeds nvarchar(100),
-	writtenTestPasswd bit default 0,
-	[sid] int constraint FK_Client_Staff foreign key([sid]) references Staff([sid]),
-	interviewId int
-	
-)
+USE easydring_dewei; 
 
+go 
 
-create table Interview(
-	interviewId int primary key,
-	[date] date,
-	interviwerName nvarchar(50) not null,
-	cId int
-)
---add relationship
-alter table Client
-add  constraint FK_Client_Interview foreign key(interviewId) references Interview(interviewId)
-alter table Interview
-add constraint FK_Interview_Client foreign key([cid]) references Client([cid])
+CREATE TABLE Branch 
+  ( 
+     bid     INT PRIMARY KEY IDENTITY, 
+     address NVARCHAR(100), 
+     city    NVARCHAR(50) 
+  ) 
 
+go 
 
-create table DrivingTest(
-cid int constraint FK_DrivingTest_Client foreign key([cid]) references Client([cid]),
-[date] date,
-drivingTestPassed bit default 0,
-reasonForFailing nvarchar(100),
-constraint PK_cid_date primary key(cid,[date])
-)
+CREATE TABLE Car 
+  ( 
+     carNo              INT PRIMARY KEY IDENTITY, 
+     registrationNumber INT 
+  ) 
 
-create table Lession(
-[sid] int constraint FK_Lession_Staff foreign key([sid]) references Staff([sid]),
-cid int constraint FK_Lession_Client foreign key(cid) references Client(cid),
-[date] date,
-[time] datetime,
-block bit,
-carNo int constraint FK_Lession_Car foreign key(carNo) references Car(carNo),
-mileage int,
-progress nvarchar(100),
-fee int,
-constraint PK_sid_cid_date_time primary key([sid],cid,[date],[time])
-)
+go 
 
+CREATE TABLE Staff 
+  ( 
+     [sid]    INT PRIMARY KEY IDENTITY, 
+     position NVARCHAR(100) NOT NULL, 
+     carNo    INT 
+          CONSTRAINT fk_staff_car FOREIGN KEY (carNo) REFERENCES Car(carNo), 
+          gender   CHAR CHECK(gender IN('M', 'F')), 
+          Dob      DATE, 
+          bid      INT 
+     CONSTRAINT fk_staff_branch FOREIGN KEY(bid) REFERENCES Branch(bid) 
+  ) 
 
+go 
 
+CREATE TABLE Inspection 
+  ( 
+     insId            INT PRIMARY KEY IDENTITY, 
+     numberFaults     INT, 
+     faultDescription NVARCHAR(500), 
+     carNo            INT 
+     CONSTRAINT fk_inspection_car FOREIGN KEY(carNo) REFERENCES Car(carNo) 
+  ) 
 
+CREATE TABLE Client 
+  ( 
+     cId                  INT PRIMARY KEY IDENTITY, 
+     personalDetails      NVARCHAR(100), 
+     validPersonalLicense BIT DEFAULT 0, 
+     specialNeeds         NVARCHAR(100), 
+     writtenTestPasswd    BIT DEFAULT 0, 
+     [sid]                INT 
+          CONSTRAINT fk_client_staff FOREIGN KEY([sid]) REFERENCES Staff([sid]), 
+     interviewId          INT 
+  ) 
 
+CREATE TABLE Interview 
+  ( 
+     interviewId    INT PRIMARY KEY, 
+     [date]         DATE, 
+     interviwerName NVARCHAR(50) NOT NULL, 
+     cId            INT 
+  ) 
+
+--add relationship 
+ALTER TABLE Client 
+  ADD CONSTRAINT fk_client_interview FOREIGN KEY(interviewId) REFERENCES 
+  Interview(interviewId) 
+
+ALTER TABLE Interview 
+  ADD CONSTRAINT fk_interview_client FOREIGN KEY([cid]) REFERENCES Client([cid]) 
+
+CREATE TABLE DrivingTest 
+  ( 
+     cid               INT 
+          CONSTRAINT fk_drivingtest_client FOREIGN KEY([cid]) REFERENCES Client( 
+     [cid] 
+          ), 
+          [date]            DATE, 
+          drivingTestPassed BIT DEFAULT 0, 
+          reasonForFailing  NVARCHAR(100), 
+     CONSTRAINT pk_cid_date PRIMARY KEY(cid, [date]) 
+  ) 
+
+CREATE TABLE Lession 
+  ( 
+     [sid]    INT 
+          CONSTRAINT fk_lession_staff FOREIGN KEY([sid]) REFERENCES Staff([sid]) 
+     , 
+          cid      INT 
+          CONSTRAINT fk_lession_client FOREIGN KEY(cid) REFERENCES Client(cid), 
+          [date]   DATE, 
+          [time]   DATETIME, 
+          block    BIT, 
+          carNo    INT 
+          CONSTRAINT fk_lession_car FOREIGN KEY(carNo) REFERENCES Car(carNo), 
+          mileage  INT, 
+          progress NVARCHAR(100), 
+          fee      INT, 
+     CONSTRAINT pk_sid_cid_date_time PRIMARY KEY([sid], cid, [date], [time]) 
+  ) 
