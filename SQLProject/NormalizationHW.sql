@@ -42,7 +42,37 @@ Ans:
 	 Ward Number -> Ward Name
 	 Ward Name -> Ward Number(maybe)
 	 Drug Number -> Name, Description, Dosage, Method of Admin, Start Date, End Date
+	 Patient Number, Drug Number -> Name, Description, Dosage, Method of Admin, Start Date, End Date
+(b)  
+(c) Patient(Patient Number(pk), Full Name)
+	Ward(Ward Number(pk), Ward Name)
+	Drug(Drug Number(pk),Name, Description, Dosage, Method of Admin)
+	PatientDrug(Patient Id(pk), Drug Id(pk),Start Date, End Date, Ward Number, Bed Number )
+	
+	
+14.15
+(a) :staffNo -> dentistName
+	patNo -> patName
+	
 
+Staff (staffNo(pk), DentistName)
+Patient(PatNo(pk), patName)
+appointmeng(staff(pk), patNo(pk), appointdateTime(pk), sugeryNo)
+
+
+14.16
+(a)
+(b)
+	NIN ->eName
+	hNo ->hLoc
+	NIN, contractNo -> hours, eName, hNo hLoc
+	
+	
+	
+(c)
+	Staff(NIN(pk), eName)
+	Hotel(hNo(pk), hLoc)
+	WorkLog(NIN(pk), contractNo(pk), hours, hNo(fk))
 
 */
 
