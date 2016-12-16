@@ -103,3 +103,13 @@ CREATE TABLE Lession
           fee      INT, 
      CONSTRAINT pk_sid_cid_date_time PRIMARY KEY([sid], cid, [date], [time]) 
   ) 
+  
+  alter table Staff
+  add  name nvarchar(100)
+  
+  alter table Client
+  add  name nvarchar(100)
+  
+  alter table Lession
+  drop column block
+  --Part 2, start to u
